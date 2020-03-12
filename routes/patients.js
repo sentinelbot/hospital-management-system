@@ -1,27 +1,26 @@
 const router = require('express').Router();
 let Patient = require('../models/patient.model');
 
-router.route('/').get((res, req) => {
+router.route('/').get((req, res) => {
     Patient.find()
         .then(patients => res.json(patients))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((res, req) => {
+router.route('/add').post((req, res) => {
     const patientColorCode = req.body.patientColorCode;
     const patientName = req.body.patientName;
     const patientAddress = req.body.patientAddress;
     const patientContact = req.body.patientContact;
-    const patientDateOfBirth = req.body.patientDateOfBirth;
+    const patientDateOfBirth = Date.parse(req.body.patientDateOfBirth);
     const patientGender = req.body.patientGender;
-    const patientMedHist_weight = Number(req.body.patientMedHist.weight);
-    const patientMedHist_height = Number(req.body.patientMedHist.height);
-    const patientMedHist_temperature = Number(req.body.patientMedHist.temperature);
-    const patientMedHist_bp = req.body.patientMedHist.bp;
-    const patientMedHist_scanImage = req.body.patientMedHist.scanImage;
-    const patientMedHist_labTest = req.body.patientMedHist.labTest;
-    const patientMedHist_drugPescription = req.body.patientMedHist.drugPescription;
-    const patientAge = Number(req.body.patientAge);
+    const patientWeight = Number(req.body.patientWeight);
+    const patientHeight = Number(req.body.patientHeight);
+    const patientTemperature = Number(req.body.patientTemperature);
+    const patientBp = req.body.patientBp;
+    const patientScanImage = req.body.patientScanImage;
+    const patientLabTest = req.body.patientLabTest;
+    const patientDrugPescription = req.body.patientDrugPescription;
     const creationDate = Date.parse(req.body.creationDate);
     const updationDate = Date.parse(req.body.updationDate);
 
@@ -32,36 +31,33 @@ router.route('/add').post((res, req) => {
         patientContact,
         patientDateOfBirth,
         patientGender,
-        patientMedHist_weight,
-        patientMedHist_height,
-        patientMedHist_temperature,
-        patientMedHist_bp,
-        patientMedHist_labTest,
-        patientMedHist_scanImage,
-        patientMedHist_drugPescription,
-        patientAge,
-        creationDate,
-        updationDate,
+        patientWeight,
+        patientHeight,
+        patientTemperature,
+        patientBp,
+        patientLabTest,
+        patientScanImage,
+        patientDrugPescription,
     });
     
     newPatient.save()
-        .then(() => res.json('Exercise added'))
+        .then(() => res.json('Patient added'))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/:id').get((res, req) => {
+router.route('/:id').get((req, res) => {
     Patient.findById(req.params.id)
         .then(patients => res.json(patients))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/:id').delete((res, req) => {
+router.route('/:id').delete((req, res) => {
     Patient.findByIdAndDelete(req.params.id)
         .then(() => res.json('Patient deleted.'))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/update/:id').post((res, req) => {
+router.route('/update/:id').post((req, res) => {
     Patient.findById(req.params.id)
         .then(patient => {
             patient.patientColorCode = req.body.patientColorCode;
@@ -70,15 +66,13 @@ router.route('/update/:id').post((res, req) => {
             patient.patientContact = req.body.patientContact;
             patient.patientDateOfBirth = req.body.patientDateOfBirth;
             patient.patientGender = req.body.patientGender;
-            patient.patientMedHist_weight = Number(req.body.patientMedHist.weight);
-            patient.patientMedHist_height = Number(req.body.patientMedHist.height);
-            patient.patientMedHist_temperature = Number(req.body.patientMedHist.temperature);
-            patient.patientMedHist_bp = req.body.patientMedHist.bp;
-            patient.patientMedHist_scanImage = req.body.patientMedHist.scanImage;
-            patient.patientMedHist_labTest = req.body.patientMedHist.labTest;
-            patient.patientMedHist_drugPescription = req.body.patientMedHist.drugPescription;
-            patient.patientAge = Number(req.body.patientAge);
-            patient.creationDate = Date.parse(req.body.creationDate);
+            patient.patientWeight = Number(req.body.patientWeight);
+            patient.patientHeight = Number(req.body.patientHeight);
+            patient.patientTemperature = Number(req.body.patientTemperature);
+            patient.patientBp = req.body.patientMedHist.bp;
+            patient.patientScanImage = req.body.patientScanImage;
+            patient.patientLabTest = req.body.patientLabTest;
+            patient.patientDrugPescription = req.body.patientDrugPescription;
             patient.updationDate = Date.parse(req.body.updationDate);
 
             patient.save()
